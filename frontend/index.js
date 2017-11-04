@@ -4,7 +4,6 @@ import ReactDOM from 'react-dom';
 import Provider from 'react-redux/lib/components/Provider';
 import browserHistory from 'react-router/lib/browserHistory';
 import Router from 'react-router/lib/Router';
-//import App from './containers/Dashboard'
 import configureStore from './flux/store';
 import routes from './routes';
 

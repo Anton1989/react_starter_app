@@ -20,7 +20,6 @@ export default class Row extends React.Component {
         let setting = {};
         setting[event.target.getAttribute('id')] = event.target.value;
         this.setState({ department: Object.assign(this.state.department, setting) });
-        //this.props.setSettings(this.adfs_id, setting);
     }
     render() {
         const { department } = this.props;

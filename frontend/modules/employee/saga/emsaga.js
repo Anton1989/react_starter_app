@@ -3,6 +3,12 @@ import fetch from 'isomorphic-fetch';
 import config from '../../../config';
 import { call, put, takeEvery } from 'redux-saga/effects'
 
+/* subscribe on actions */
+function* sagaEmployees() {
+	yield takeEvery(GET_EMPLOYEE_REQUEST, fetchEmployees);
+}
+
+/* middlewares */
 function* fetchEmployees(action) {
 	try {
 		const employees = yield call(getEmployees);
@@ -11,9 +17,8 @@ function* fetchEmployees(action) {
 		yield put({type: GET_EMPLOYEE_ERROR, message: e.message});
 	}
 }
-function* sagaEmployees() {
-  	yield takeEvery(GET_EMPLOYEE_REQUEST, fetchEmployees);
-}
+
+/* queries */
 function getEmployees() {
 	return fetch(config.employeeURL, {
 		method: 'get'

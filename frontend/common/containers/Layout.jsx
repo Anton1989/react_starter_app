@@ -3,6 +3,8 @@ import connect from 'react-redux/lib/connect/connect';
 //Components
 import Navbar from '../components/Navigation.jsx';
 import LeftMenu from '../components/LeftMenu.jsx';
+// import withStyles from 'isomorphic-style-loader/lib/withStyles';
+import './Layout.scss';
 
 class Layout extends React.Component {
 	constructor(...props) {

@@ -1,4 +1,5 @@
 import React from 'react';
+// import './Loading.scss';
 
 export default class Loading extends React.Component {
     render() {

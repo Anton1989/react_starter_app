@@ -1,16 +1,16 @@
-var path = require('path');
-var webpack = require('webpack');
-var CompressionPlugin = require('compression-webpack-plugin');
-var core_url = process.env.CORE_URL ? process.env.CORE_URL : '/';
+const path = require('path');
+const webpack = require('webpack');
+const CompressionPlugin = require('compression-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
     entry: [
         './frontend/index'
     ],
     output: {
-        path: path.join(__dirname, '/dist'),
-        filename: process.env.NODE_MODE == "executive" ? 'bundle-prod.ex.js' : 'bundle-prod.js',
-        publicPath: '/dist'
+        path: path.join(__dirname, '/backend/static/bundle'),
+        filename: 'bundle-prod.js',
+        publicPath: '/backend/static/bundle'
     },
     plugins: [
         new webpack.optimize.OccurrenceOrderPlugin(),
@@ -34,19 +34,21 @@ module.exports = {
                 NODE_ENV: JSON.stringify('production')
             }
         }),
-        new CompressionPlugin({ 
-            asset: process.env.NODE_MODE == "executive" ? 'bundle-prod.ex.js.gz' : 'bundle-prod.js.gz',
+        new CompressionPlugin({
+            asset: 'bundle-prod.js.gz',
             algorithm: "gzip",
-            test: /\.js$|\.css$|\.html$/,
+            test: /\.js$|\.html$/,
             threshold: 10240,
             minRatio: 0.8
-        })
+        }),
+        new ExtractTextPlugin("../css/styles.css")
     ],
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/, // both .js and .jsx
                 include: path.resolve(__dirname, 'frontend'),
+                exclude: [/\.scss$/],
                 use: [
                     {
                         loader: 'babel-loader',
@@ -57,8 +59,16 @@ module.exports = {
                 ],
             },
             {
-                test:   /\.css$/,
-                loader: "style-loader!css-loader!postcss-loader"
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    use: [{
+                        loader: "css-loader"
+                    }, {
+                        loader: "sass-loader"
+                    }],
+                    // use style-loader in development
+                    fallback: "style-loader"
+                })
             }
         ]
     }

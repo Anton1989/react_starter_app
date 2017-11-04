@@ -1,54 +1,57 @@
-var path = require('path');
-var webpack = require('webpack');
-var core_url = process.env.CORE_URL ? process.env.CORE_URL : '/';
+var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 
 module.exports = {
-    devtool: 'cheap-module-eval-source-map',
-    entry: [
-        'webpack-hot-middleware/client',
-        'babel-polyfill',
-        './frontend/index'
-    ],
-    output: {
-        path: path.join(__dirname, 'dist'),
-        filename: 'bundle-dev.js',
-        publicPath: core_url+'dist'
-    },
-    plugins: [
-        new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify('development')
-            }
-        })
-    ],
-    module: {
-        rules: [
-            {
-                test: /\.(js|jsx)$/, // both .js and .jsx
-                include: path.resolve(__dirname, 'frontend'),
-                enforce: 'pre',
-                use: [
-                    {
-                        loader: 'babel-loader',
-                        options: {
-                            cacheDirectory: true,
-                        },
-                    },
-                ],
+    assets: {
+        images: {
+            extensions: [
+                'jpeg',
+                'jpg',
+                'png',
+                'gif'
+            ],
+            parser: WebpackIsomorphicToolsPlugin.url_loader_parser
+        },
+        fonts: {
+            extensions: [
+                'woff',
+                'woff2',
+                'ttf',
+                'eot'
+            ],
+            parser: WebpackIsomorphicToolsPlugin.url_loader_parser
+        },
+        svg: {
+            extension: 'svg',
+            parser: WebpackIsomorphicToolsPlugin.url_loader_parser
+        },
+        style_modules: {
+            extensions: ['scss'],
+            filter: function(module, regex, options, log) {
+                if (options.development) {
+                    return WebpackIsomorphicToolsPlugin.style_loader_filter(module, regex, options, log);
+                } else {
+                    return regex.test(module.name);
+                }
             },
-            {
-                exclude: [/node_modules/],
-                include: [
-                    path.resolve(__dirname, "frontend"),
-                ],
-                loader: 'react-hot-loader'
+            path: function(module, options, log) {
+                if (options.development) {
+                    // in development mode there's webpack "style-loader",
+                    // so the module.name is not equal to module.name
+                    return WebpackIsomorphicToolsPlugin.style_loader_path_extractor(module, options, log);
+                } else {
+                    // in production mode there's no webpack "style-loader",
+                    // so the module.name will be equal to the asset path
+                    return module.name;
+                }
             },
-            {
-                test:   /\.css$/,
-                loader: "style-loader!css-loader!postcss-loader"
+            parser: function(module, options, log) {
+                if (options.development) {
+                    return WebpackIsomorphicToolsPlugin.css_modules_loader_parser(module, options, log);
+                } else {
+                    // in production mode there's Extract Text Loader which extracts CSS text away
+                    return module.source;
+                }
             }
-        ]
+        }
     }
 }

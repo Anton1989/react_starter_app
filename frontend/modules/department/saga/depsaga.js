@@ -3,6 +3,12 @@ import fetch from 'isomorphic-fetch';
 import config from '../../../config';
 import { call, put, takeEvery } from 'redux-saga/effects'
 
+/* subscribe on actions */
+function* sagaDepartments() {
+	yield takeEvery(GET_DEPARTMENTS_REQUEST, fetchDepartments);
+}
+
+/* middlewares */
 function* fetchDepartments(action) {
 	try {
 		const departments = yield call(getDepartments);
@@ -11,9 +17,8 @@ function* fetchDepartments(action) {
 		yield put({type: GET_DEPARTMENTS_ERROR, message: e.message});
 	}
 }
-function* sagaDepartments() {
-  	yield takeEvery(GET_DEPARTMENTS_REQUEST, fetchDepartments);
-}
+
+/* queries */
 function getDepartments() {
 	return fetch(config.departmentURL, {
 		method: 'get'
