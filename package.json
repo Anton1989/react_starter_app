@@ -2,15 +2,33 @@
   "name": "starter",
   "version": "1.0.5",
   "description": "starter",
-  "main": "index.js",
-  "scripts": {
-    "start": "SERVER=127.0.0.1 SERVER_PORT=8085 NODE_ENV=production forever --max-old-space-size=1024 start -c babel-node backend/index.js",
-    "build": "./node_modules/.bin/webpack --progress -p --colors --display-error-details --config webpack.prod.js",
-    "start-dev": "SERVER=127.0.0.1 SERVER_PORT=8085 NODE_ENV=development nodemon backend/index.js --ignore 'frontend/*.js' --exec babel-node --presets es2015,stage-2,react",
-    "build-dev": "./node_modules/.bin/webpack --progress --colors --display-error-details --config webpack.dev.js"
-  },
   "author": "AAA",
   "license": "MIT",
+  "main": "index.js",
+  "scripts": {
+    "start": "better-npm-run start-prod",
+    "build": "webpack --progress -p --colors --display-error-details --config webpack.prod.js",
+    "start-dev": "better-npm-run start-dev",
+    "build-dev": "webpack --progress --colors --display-error-details --config webpack.dev.js"
+  },
+  "betterScripts": {
+    "start-prod": {
+      "command": "forever --max-old-space-size=1024 start -c babel-node backend/index.js",
+      "env": {
+        "SERVER": "127.0.0.1",
+        "SERVER_PORT": "1989",
+        "NODE_ENV": "production"
+      }
+    },
+    "start-dev": {
+      "command": "nodemon backend/index.js --ignore 'frontend/*.js' --exec babel-node --presets es2015,stage-2,react",
+      "env": {
+        "SERVER": "127.0.0.1",
+        "SERVER_PORT": "8002",
+        "NODE_ENV": "development"
+      }
+    }
+  },
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
@@ -22,6 +40,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "babel-runtime": "^6.23.0",
+    "better-npm-run": "^0.1.0",
     "compression-webpack-plugin": "^0.3.2",
     "css-loader": "^0.26.4",
     "eslint": "^3.19.0",
