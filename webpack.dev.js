@@ -1,57 +1,73 @@
-var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
+const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
-    assets: {
-        images: {
-            extensions: [
-                'jpeg',
-                'jpg',
-                'png',
-                'gif'
-            ],
-            parser: WebpackIsomorphicToolsPlugin.url_loader_parser
-        },
-        fonts: {
-            extensions: [
-                'woff',
-                'woff2',
-                'ttf',
-                'eot'
-            ],
-            parser: WebpackIsomorphicToolsPlugin.url_loader_parser
-        },
-        svg: {
-            extension: 'svg',
-            parser: WebpackIsomorphicToolsPlugin.url_loader_parser
-        },
-        style_modules: {
-            extensions: ['scss'],
-            filter: function(module, regex, options, log) {
-                if (options.development) {
-                    return WebpackIsomorphicToolsPlugin.style_loader_filter(module, regex, options, log);
-                } else {
-                    return regex.test(module.name);
-                }
-            },
-            path: function(module, options, log) {
-                if (options.development) {
-                    // in development mode there's webpack "style-loader",
-                    // so the module.name is not equal to module.name
-                    return WebpackIsomorphicToolsPlugin.style_loader_path_extractor(module, options, log);
-                } else {
-                    // in production mode there's no webpack "style-loader",
-                    // so the module.name will be equal to the asset path
-                    return module.name;
-                }
-            },
-            parser: function(module, options, log) {
-                if (options.development) {
-                    return WebpackIsomorphicToolsPlugin.css_modules_loader_parser(module, options, log);
-                } else {
-                    // in production mode there's Extract Text Loader which extracts CSS text away
-                    return module.source;
-                }
+    devtool: 'cheap-module-eval-source-map',
+    entry: [
+        'webpack-hot-middleware/client',
+        'babel-polyfill',
+        './frontend/index'
+    ],
+    output: {
+        path: path.join(__dirname, 'dist'),
+        filename: 'bundle-dev.js',
+        publicPath: '/dist'
+    },
+    plugins: [
+        new webpack.optimize.OccurrenceOrderPlugin(),
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify('development')
             }
-        }
+        })
+    ],
+    module: {
+        rules: [
+            {
+                test: /\.(js|jsx)$/, // both .js and .jsx
+                include: path.resolve(__dirname, 'frontend'),
+                enforce: 'pre',
+                use: [
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            cacheDirectory: true,
+                        },
+                    },
+                ],
+            },
+            {
+                exclude: [/node_modules/,/\.scss$/],
+                include: [
+                    path.resolve(__dirname, 'frontend'),
+                ],
+                loader: 'react-hot-loader'
+            },
+            {
+                test: /\.scss$/,
+                use: [{
+                    loader: 'style-loader',
+                    query: {
+                        sourceMap: 1
+                    }
+                }, {
+                    loader: 'css-loader',
+                    query: {
+                        importLoaders: 1,
+                        modules: 1
+                    },
+                    options: {
+                        sourceMap: true
+                    }
+                }, {
+                    loader: 'sass-loader',
+                    options: {
+                        includePaths: [path.resolve(__dirname, '../src/frontend')],
+                        sourceMap: true
+                    }
+                }]
+            }
+        ]
     }
 }
