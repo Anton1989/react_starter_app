@@ -9,18 +9,9 @@ if (!ENV_HOST || !ENV_PORT) {
     throw new Error('Web APP failed on start, incorrect host (' + ENV_HOST + ') or port (' + ENV_PORT + ') were setted in envirement.');
 }
 
-if (ENV_DEVELOPMENT) {
-    if (!require('piping')({
-        hook: true,
-        ignore: /(\/\.|~$|\.json|\.scss$)/i
-    })) {
-        throw new Error('Failed to initialize "piping" module');
-    }
-}
-
 if (ENV_DEVELOPMENT === false) {
     app.use('*.js', setBundleHeaders); // USE GZIP COMPRESSION FOR PRODUCTION BUNDLE
-    app.use('/dist', express.static(__dirname + '/../dist'));
+    app.use('/dist', express.static(__dirname + '/static/bundle'));
 }
 app.use('/css', express.static(__dirname + '/static/css'));
 app.use('/images', express.static(__dirname + '/static/images'));

@@ -1,17 +1,17 @@
 import React from 'react';
-// import './Loading.scss';
+import styles from './Loading.scss';
 
 export default class Loading extends React.Component {
     render() {
-        return <div id='floatBarsG'>
-            <div id='floatBarsG_1' className='floatBarsG'></div>
-            <div id='floatBarsG_2' className='floatBarsG'></div>
-            <div id='floatBarsG_3' className='floatBarsG'></div>
-            <div id='floatBarsG_4' className='floatBarsG'></div>
-            <div id='floatBarsG_5' className='floatBarsG'></div>
-            <div id='floatBarsG_6' className='floatBarsG'></div>
-            <div id='floatBarsG_7' className='floatBarsG'></div>
-            <div id='floatBarsG_8' className='floatBarsG'></div>
+        return <div id={styles.floatBarsG}>
+            <div id={styles.floatBarsG_1} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_2} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_3} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_4} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_5} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_6} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_7} className={styles.floatBarsG}></div>
+            <div id={styles.floatBarsG_8} className={styles.floatBarsG}></div>
         </div>
     }
 }

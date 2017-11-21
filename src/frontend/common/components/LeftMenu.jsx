@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 //Components
 import Link from 'react-router/lib/Link';
+import styles from './LeftMenu.scss';
 
 export default class LeftMenu extends React.Component {
     constructor(...props) {
@@ -33,7 +34,7 @@ export default class LeftMenu extends React.Component {
 
             return <li key={item.anchor} className={active}>
                 <Link onClick={onExtend} to={item.url ? item.url : null}>{item.anchor}</Link>
-                {submenu ? <ul className='nav nav-sidebar submenu'>{submenu}</ul> : null}
+                {submenu ? <ul className={styles.navSidebar + ' nav submenu nav-sidebar'}>{submenu}</ul> : null}
             </li>
         })
     }
@@ -47,8 +48,8 @@ export default class LeftMenu extends React.Component {
         console.log('RENDER <LeftMenu>');
         const { menu, isActive } = this.props;
 
-        return <div id='menu' className='col-sm-3 col-md-2 sidebar'>
-            <ul className='nav nav-sidebar'>
+        return <div id='menu' className={styles.sidebar + ' col-sm-3 col-md-2 sidebar'}>
+            <ul className={styles.navSidebar + ' nav nav-sidebar'}>
                 {menu.length > 0 && this.generateMenu(menu, isActive)}
             </ul>
         </div>

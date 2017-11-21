@@ -7,8 +7,7 @@ import Layout from './common/containers/Layout.jsx';
 import DepartmentList from './modules/department/containers/List.jsx';
 import EmployeeList from './modules/employee/containers/List.jsx';
 
-export default (data) => {
-    console.log(data);
+export default (/* data */) => {
     return (
         <Route path='/' component={Layout}>
             <IndexRoute component={DepartmentList} />

@@ -10,22 +10,22 @@ var port = Number(process.env.SERVER_PORT);
 var WebpackIsomorphicToolsPlugin = require('webpack-isomorphic-tools/plugin');
 var webpackIsomorphicToolsPlugin = new WebpackIsomorphicToolsPlugin(require('./webpack-isomorphic-tools'));
 var babelrcObject = {
-    "plugins": [
-        "transform-runtime",
-        "add-module-exports",
-        "transform-decorators-legacy",
-        "transform-react-display-name"
+    'plugins': [
+        'transform-runtime',
+        'add-module-exports',
+        'transform-decorators-legacy',
+        'transform-react-display-name'
     ],
-    "env": {
-        "development": {
-            "plugins": [
-                "typecheck",
+    'env': {
+        'development': {
+            'plugins': [
+                'typecheck',
                 [
-                    "react-transform", {
-                        "transforms": [
+                    'react-transform', {
+                        'transforms': [
                             {
-                                "transform": "react-transform-catch-errors",
-                                "imports": ["react", "redbox-react"]
+                                'transform': 'react-transform-catch-errors',
+                                'imports': ['react', 'redbox-react']
                             }
                         ]
                     }
@@ -94,25 +94,32 @@ module.exports = {
             { test: /\.json$/, loader: 'json-loader' },
             {
                 test: /\.scss$/,
-                use: [{
-                    loader: 'style-loader',
-                    query: {
-                        sourceMap: 1
+                use: [
+                    {
+                        loader: 'style-loader',
+                        query: {
+                            sourceMap: 1
+                        }
+                    },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            sourceMap: true,
+                            importLoaders: 1,
+                            modules: 1,
+                            localIdentName: '[name]__[local]--[hash:base64:5]'
+                        }
+                    },
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            sourceMap: true,
+                            includePaths: [path.resolve(__dirname, 'frontend')]
+                        }
                     }
-                }, {
-                    loader: 'css-loader',
-                    query: {
-                        importLoaders: 1,
-                        modules: 1
-                    }
-                }, {
-                    loader: 'sass-loader',
-                    options: {
-                        includePaths: [path.resolve(__dirname, 'frontend')]
-                    }
-                }]
+                ]
             },
-            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: "url?limit=10000&mimetype=image/svg+xml" }
+            { test: /\.svg(\?v=\d+\.\d+\.\d+)?$/, loader: 'url?limit=10000&mimetype=image/svg+xml' }
         ]
     },
     plugins: [

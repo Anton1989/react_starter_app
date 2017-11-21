@@ -23,5 +23,15 @@
         "react/jsx-uses-react": 1,
         "react/jsx-uses-vars": 1,
         "no-undef": 2
+    },
+    
+    "globals": {
+        "ENV_IS_SERVER": true,
+        "ENV_DEVELOPMENT": true,
+        "ENV_HOST": true,
+        "ENV_PORT": true,
+        "socket": true,
+        "webpackIsomorphicTools": true
     }
-}
+  }
+  
