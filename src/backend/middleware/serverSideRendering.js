@@ -50,8 +50,9 @@ function renderPage(appHtml, store) {
     const assets = webpackIsomorphicTools.assets();
     const finalState = store.getState();
     const jsBundle = assets.javascript.main;
-    console.log(assets.styles.main)
+    
     const cssBundle = assets.styles.main;
+    const cssTag = cssBundle ? `<link rel="stylesheet" href="${cssBundle}">` : null;
     return `<!DOCTYPE html>
         <html>
         <head>
@@ -59,7 +60,7 @@ function renderPage(appHtml, store) {
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
         <!-- Optional theme -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap-theme.min.css">
-        <link rel="stylesheet" href="${cssBundle}">
+        ${cssTag}
         <link rel="icon" href="/favicon.ico" type="image/x-icon" />
         <title>STARTER BY AAA</title>
         <script>
